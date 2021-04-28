@@ -61,6 +61,14 @@
     color: black;
 }
 
+.username-review{
+    color: #206a5d !important;
+}
+
+.username-review{
+    text-decoration: none !important;
+}
+
 /* jQuery UI Autocomplete Styling Source : https://jsfiddle.net/gotemkfr/*/
 
 .ui-autocomplete {

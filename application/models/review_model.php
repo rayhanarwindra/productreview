@@ -16,8 +16,9 @@ class Review_model extends CI_Model{
 
         return true;
     }
-    public function getByItemId($itemId){
-
+    public function getReviews($itemId){
+        $query = $this->db->where('itemId', $itemId)->get('review');
+        return $query->result_array();
     }
 }
 ?>

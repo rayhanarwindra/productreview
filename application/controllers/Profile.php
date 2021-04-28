@@ -9,20 +9,20 @@
             $this->load->library('form_validation');
         }
 
-        public function profile_view(){
-            if ($_SESSION['username'] != null){
-                $data['error'] = "";
-                $data['title'] = $_SESSION['username']." Profile";
-                $this->load->view('templates/header', $data);
-                $data['username'] = $_SESSION['username'];
-                $data['email'] = $this->user_model->getEmail($_SESSION['username']);
-                $data['image'] = $this->user_model->getImage($_SESSION['username']);
-
-                $this->load->view('pages/profile', $data);
-                $this->load->view('templates/footer');
-            }else{
-                redirect('pages/view');
+        public function profile_view($username){
+            $data['isUser'] = false;
+            if ($this->session->userdata('logged_in') && $_SESSION['username'] == $username){
+                $data['isUser'] = true;
             }
+            $data['error'] = "";
+            $data['title'] = $username." Profile";
+            $this->load->view('templates/header', $data);
+            $data['username'] = $username;
+            $data['email'] = $this->user_model->getEmail($username);
+            $data['image'] = $this->user_model->getImage($username);
+
+            $this->load->view('pages/profile', $data);
+            $this->load->view('templates/footer');
         }
 
         public function edit_view(){
@@ -37,7 +37,7 @@
         }
 
         public function update_profile(){
-            $username = $_SESSION['username'];
+            $username = $this->input->post('username');
             $email = $this->input->post('email');
 
             if ($this->user_model->update_user($username, $email)){

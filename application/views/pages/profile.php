@@ -8,15 +8,19 @@
     <div class="col-md-6 text-center">
         <img class="img-fluid profile-image" src="<?php echo base_url().'/uploads/'.$image?>" />
         <div>
+          <?php if ($isUser): ?>
         <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Change Picture</button>
+        <?php endif?>
         </div>
     </div>
     <div class="col-md-6">
         <h1><?php echo $username?></h1>
         <h4 class="mt-4"><?php echo $email?></h4>
         <div class="mt-4">
+          <?php if ($isUser): ?>
             <a class="btn btn-primary" href="<?php echo site_url('profile/edit_view') ?>">Edit Profile</a>
             <a class="btn btn-primary ml-2" href="<?php echo site_url('profile/view_favorites') ?>">Favorite Items</a>
+          <?php endif ?>
         </div>
     </div>
 </div>

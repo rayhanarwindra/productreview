@@ -45,7 +45,7 @@
       </li>
       <?php if ( $this->session->userdata('logged_in') ) : ?>
         <li class="nav-item">
-        <a class="nav-link" href="<?php echo site_url('profile/profile_view') ?>">Profile</a>
+        <a class="nav-link" href="<?php echo site_url('profile/profile_view/'.$_SESSION['username']) ?>">Profile</a>
       </li>
         <li class="nav-item">
         <a class="nav-link" href="<?php echo site_url('login/logout') ?>">Logout</a>
