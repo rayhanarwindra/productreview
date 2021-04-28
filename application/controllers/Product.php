@@ -8,6 +8,7 @@ class Product extends CI_Controller{
         $this->load->library('form_validation');
         $this->load->model('product_model');
         $this->load->model('review_model');
+        $this->load->model('user_model');
     }
 
     public function write_review($itemId = null){
@@ -68,6 +69,10 @@ class Product extends CI_Controller{
         $data['item'] = get_object_vars($this->product_model->findByName($item));
         $data['title'] = 'View '.$item;
         $data['reviews'] = $this->review_model->getReviews($data['item']['Id']);
+        $data['isFavorite']  = false;
+        if ($this->session->userdata('logged_in')){
+            $data['isFavorite'] = $this->user_model->isFavorite($_SESSION['username'], $data['item']['Id']);
+        }
         $this->load->view('templates/header', $data);
         $this->load->view('pages/item_detail', $data);
         $this->load->view('templates/footer');

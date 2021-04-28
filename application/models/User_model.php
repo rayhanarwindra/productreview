@@ -22,6 +22,18 @@ class User_model extends CI_Model{
         return false;
     }
 
+    public function isFavorite($username, $Id){
+        if (!$username){
+            return false;
+        }
+        $this->db->where('username', $username);
+        $this->db->where('Id',$Id);
+        if( $this->db->get('user-item')->row() ){
+            return true;
+        }
+        return false;
+    }
+
     public function register(){
         $this->load->helper('url');
 

@@ -6,7 +6,7 @@
     <div class="card-body">
     <div class="row mt-3">
     <?php foreach ($favorites as $product): ?>
-    <div class="col-md-6">
+    <div class="col-md-3 text-center">
         <div class="mb-4">
         <a class ="item-link" href="<?php echo site_url('product/detail_view/'.$product['name']) ?>">
         <div class="card card-body shadow">
