@@ -16,14 +16,13 @@ class Login extends CI_Controller {
 		$this->load->view('templates/header', $data);
 		$data['error']= "";
 		
-		if (!$this->session->userdata('logged_in'))//check if user already login
-		{
-			if (get_cookie('remember')) {
-				if (get_cookie('remember')){ // check if user activate the "remember me" feature
-				$username = get_cookie('username'); //get the username from cookie
-				$password = get_cookie('password'); //get the username from cookie
-				if ( $this->user_model->login($username, $password) )//check username and password correct
-				{
+		if (!$this->session->userdata('logged_in')){
+			if (get_cookie('remember')) { // check if user activate the "remember me" feature
+				$token = get_cookie('token'); //get the username from cookie
+				echo get_cookie('remember');
+				$username = $this->user_model->remember_me($token);
+				if ( $username != null ){//check username and password correct
+					$username = $this->user_model->get_user($token);
 					$user_data = array(
 						'username' => $username,
 						'logged_in' => true //create session variable
@@ -31,12 +30,11 @@ class Login extends CI_Controller {
 					$this->session->set_userdata($user_data); //set user status to login in session
 					redirect('pages/view'); //if user already logined show main page
 				}
-			}
+			
 			}else{
 		
 				$this->load->view('pages/login', $data);	//if username password incorrect, show error msg and ask user to login
-			}  
-			
+			}  	
 		}else{
 			redirect('pages/view'); //if user already logined show main page
 		}
@@ -58,9 +56,10 @@ class Login extends CI_Controller {
 					'logged_in' => true 	//create session variable
 				);
 				if($remember) { // if remember me is activated create cookie
-					set_cookie("username", $username, '300'); //set cookie username
-					set_cookie("password", $password, '300'); //set cookie password
-					set_cookie("remember", $remember, '300'); //set cookie remember
+					$token = bin2hex(random_bytes(9));
+					$this->user_model->remember($username, $token);
+					set_cookie("token", $token, '86400'); //set cookie username
+					set_cookie("remember", $remember, '86400'); //set cookie remember
 				}	
 				$this->session->set_userdata($user_data); //set user status to login in session
 				redirect('pages/view'); // direct user home page
@@ -96,6 +95,7 @@ class Login extends CI_Controller {
 	public function logout(){
 		$this->session->unset_userdata('logged_in');
 		$this->session->unset_userdata('username');
+		set_cookie('remember', false,time() - 3600);
 		redirect('pages/view');
 	}
     

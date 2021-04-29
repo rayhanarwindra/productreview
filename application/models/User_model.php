@@ -86,6 +86,21 @@ class User_model extends CI_Model{
         $this->db->delete('user-item');
         return true;
     }
+
+    public function remember($username, $token){
+        $data = array(
+            'token' => $token,
+        );
+
+        $this->db->where('username', $username);
+        $this->db->update('user', $data);
+    }
+
+    public function remember_me($token){
+        $query = $this->db->where('token', $token)->get('user');
+        
+        return $query->row()->username;
+    }
 }
 
 ?>
