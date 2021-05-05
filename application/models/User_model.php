@@ -75,7 +75,7 @@ class User_model extends CI_Model{
     }
 
     public function getFavoriteItems($username){
-        $query = $this->db->query("SELECT * FROM `item` WHERE `Id` in (SELECT `Id` FROM `user-item` WHERE `username`=`username`)");
+        $query = $this->db->query("SELECT * FROM `item` WHERE `Id` in (SELECT `Id` FROM `user-item` WHERE `username`= ?)", array($username));
         return $query->result_array();
 
     }

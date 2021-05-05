@@ -48,6 +48,7 @@
         }
 
         public function upload_photo(){
+           
             $config['upload_path'] = './uploads/';
 		    $config['allowed_types'] = 'jpg|png|gif';
 		    $config['max_size'] = 20000;
@@ -57,10 +58,15 @@
             $this->load->library('upload', $config);
             
             if( !$this->upload->do_upload('userfile')){
+        
                 $data = array('error' => $this->upload->display_errors());
                 $data['title'] = $_SESSION['username']." Profile";
                 $this->load->view('templates/header', $data);
                 $data['username'] = $_SESSION['username'];
+                $data['isUser'] = false;
+                if ($this->session->userdata('logged_in') && $_SESSION['username'] == $username){
+                    $data['isUser'] = true;
+                }
                 $data['email'] = $this->user_model->getEmail($_SESSION['username']);
                 $data['image'] = $this->user_model->getImage($_SESSION['username']);
                 
@@ -68,7 +74,7 @@
                 $this->load->view('templates/footer');
             }else{
                 $this->user_model->upload($this->upload->data('file_name'), $this->upload->data('full_path'),$username);
-                redirect('profile/profile_view');
+                redirect('profile/profile_view/'.$_SESSION['username']);
             }
                
         }
